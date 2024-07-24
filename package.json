@@ -1,0 +1,18 @@
+{
+  "name": "cli-prompt",
+  "version": "1.0.0",
+  "description": "Simple CLI prompt",
+  "main": "index.js",
+  "types": "index.ts",
+  "author": "topkat",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "build:allPackagesPhase2": "yarn build"
+  },
+  "dependencies": {
+    "inquirer": "9",
+    "topkat-utils": "1.2.96",
+    "typescript": "5.3.3"
+  }
+}
