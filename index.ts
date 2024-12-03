@@ -23,7 +23,7 @@ export async function cliPrompt<
         hasErr = typeof tests === 'function' ? !tests(response) : tests.some(test => !test(response))
     }
     br()
-    return typeof formattingFunction === 'function' ? formattingFunction(response) : response
+    return (typeof formattingFunction === 'function' ? formattingFunction(response) : response) as any
 }
 
 function cliPromptBlankSpace(): string[] {

@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "bump-simple": "^1.0.24",
-    "inquirer": "9",
+    "inquirer": "^12.1.0",
     "topkat-utils": "1.2.96",
     "typescript": "5.3.3"
   },
