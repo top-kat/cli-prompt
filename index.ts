@@ -1,8 +1,10 @@
 
-import inquirer from 'inquirer'
+import inquirer, { Question, } from 'inquirer'
 import { C } from 'topkat-utils'
 
 type TestFn = (userResponse: string) => boolean
+
+type QuestionType = 'input' | 'number' | 'confirm' | 'list' | 'rawlist' | 'expand' | 'checkbox' | 'password' | 'editor'
 
 export async function cliPrompt<
     U extends string,
@@ -14,12 +16,22 @@ export async function cliPrompt<
 ): Promise<T extends { choices: any } ? T['choices'][number] : boolean> {
     let response
     let hasErr = true
-    const newConf: Record<string, any> = { ...config }
+
+    const type: QuestionType = 'confirm' in config ? 'confirm' as const : 'choices' in config ? 'list' : 'input'
+
+    const choices = 'choices' in config ? config.choices : undefined
+
+    const newConf: Question = {
+        name: 'response',
+        message: config.message,
+        type,
+        choices
+    }
     newConf.name = 'response'
     newConf.type = 'confirm' in config ? 'confirm' : 'message' in config ? 'text' : 'list'
     if ('choices' in config) newConf.choices.push(...cliPromptBlankSpace())
     while (hasErr) {
-        response = (await inquirer.prompt(newConf)).response
+        response = (await inquirer.prompt(newConf as any)).response
         hasErr = typeof tests === 'function' ? !tests(response) : tests.some(test => !test(response))
     }
     br()
