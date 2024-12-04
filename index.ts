@@ -27,9 +27,7 @@ export async function cliPrompt<
         type,
         choices
     }
-    newConf.name = 'response'
-    newConf.type = 'confirm' in config ? 'confirm' : 'message' in config ? 'text' : 'list'
-    if ('choices' in config) newConf.choices.push(...cliPromptBlankSpace())
+
     while (hasErr) {
         response = (await inquirer.prompt(newConf as any)).response
         hasErr = typeof tests === 'function' ? !tests(response) : tests.some(test => !test(response))
