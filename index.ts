@@ -1,11 +1,15 @@
 
-import inquirer, { Question, } from 'inquirer'
+
+import inquirer, { Question } from 'inquirer'
 import { C } from 'topkat-utils'
 
 type TestFn = (userResponse: string) => boolean
 
 type QuestionType = 'input' | 'number' | 'confirm' | 'list' | 'rawlist' | 'expand' | 'checkbox' | 'password' | 'editor'
 
+/**
+ * Prompts the user with a CLI question and validates the response. If only message is provided, it will ask user input. If choices are provided in the config, it returns one of the choices. Otherwise, it returns a boolean.
+ */
 export async function cliPrompt<
     U extends string,
     T extends { message: string, confirm?: boolean } | { choices: U[] | readonly U[], message?: never },
@@ -13,7 +17,7 @@ export async function cliPrompt<
     config: T,
     tests: TestFn | Array<TestFn> = [],
     formattingFunction?: TestFn
-): Promise<T extends { choices: any } ? T['choices'][number] : boolean> {
+): Promise<T extends { choices: any } ? T['choices'][number] : T extends { confirm: any } ? boolean : string> {
     let response
     let hasErr = true
 
@@ -34,10 +38,6 @@ export async function cliPrompt<
     }
     br()
     return (typeof formattingFunction === 'function' ? formattingFunction(response) : response) as any
-}
-
-function cliPromptBlankSpace(): string[] {
-    return Array(10).fill(new inquirer.Separator(' '))
 }
 
 /** choices: ['A', 'B', separator(), 'C']
